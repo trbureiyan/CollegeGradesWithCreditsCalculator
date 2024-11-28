@@ -2,8 +2,11 @@ import re
 import json
 
 def update_readme():
-    with open('grades.json', 'r') as file:
-        grades = json.load(file)
+    try:
+        with open('grades.json', 'r') as file:
+            grades = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        grades = []
 
     valid_grades = [grade for grade in grades if isinstance(grade, (int, float))]
     overall_average = sum(valid_grades) / len(valid_grades) if valid_grades else 0

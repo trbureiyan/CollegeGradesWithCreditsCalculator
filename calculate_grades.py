@@ -1,3 +1,4 @@
+import re
 import json
 
 def get_course_data():

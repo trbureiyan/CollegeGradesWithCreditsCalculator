@@ -7,16 +7,19 @@ on:
   schedule:
     - cron: '0 0 * * *'  # Runs once every 24 hours
 
+permissions:
+  contents: write
+
 jobs:
   update-readme:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: '3.x'
 
@@ -37,11 +40,7 @@ jobs:
         python update_readme.py
 
     - name: Commit and push changes
-      run: |
-        git config --global user.name 'github-actions[bot]'
-        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git add README.md
-        git commit -m 'Update README with latest grades'
-        git push
-      env:
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'Update README with latest grades'
+        file_pattern: README.md

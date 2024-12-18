@@ -1,5 +1,6 @@
 import re
 import json
+from tabulate import tabulate
 
 def get_course_data():
     courses = []
@@ -25,15 +26,23 @@ def calculate_final_grade(courses):
     weighted_sum = sum(course['credits'] * course['grade'] for course in valid_courses)
     return weighted_sum / total_credits
 
-def save_grades(all_semesters):
+def save_semester(semester_data):
     try:
         with open('grades.json', 'r') as file:
-            existing_grades = json.load(file)
+            all_data = json.load(file)
     except (json.JSONDecodeError, FileNotFoundError):
-        existing_grades = []
-    existing_grades.extend(all_semesters)
+        all_data = []
+    all_data.append(semester_data)
     with open('grades.json', 'w') as file:
-        json.dump(existing_grades, file)
+        json.dump(all_data, file, indent=4)
+
+def load_all_data():
+    try:
+        with open('grades.json', 'r') as file:
+            all_data = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        all_data = []
+    return all_data
 
 def delete_saved_data():
     confirmation = input("Are you sure you want to delete all saved data? (yes/no): ").lower()
@@ -44,34 +53,52 @@ def delete_saved_data():
     else:
         print("Data deletion canceled.")
 
-def main():
-    all_semesters = []
-    while True:
-        print("\nEnter data for a new semester:")
-        courses = get_course_data()
-        final_grade = calculate_final_grade(courses)
-        if final_grade is not None:
-            all_semesters.append({"semester": len(all_semesters) + 1, "grade": final_grade})
-            print(f"Final grade for this semester: {final_grade:.2f}")
-        else:
-            print("No valid grades entered for this semester.")
-        action = input("Choose an action - (c)ontinue, (d)elete data, (e)xit: ").lower()
-        if action == 'c':
-            continue
-        elif action == 'd':
-            delete_saved_data()
-            all_semesters = []
-        elif action == 'e':
-            break
-        else:
-            print("Invalid option. Exiting.")
-            break
-    if all_semesters:
-        overall_average = sum(s["grade"] for s in all_semesters) / len(all_semesters)
-        print(f"\nOverall average grade: {overall_average:.2f}")
-        save_grades(all_semesters)
+def display_semester(semester):
+    print(f"\nSemester {semester['semester_number']}: Final Grade {semester['final_grade']:.2f}")
+    if 'courses' in semester and semester['courses']:
+        headers = ['Course Name', 'Credits', 'Grade']
+        table = [[course['name'], course['credits'], course['grade']] for course in semester['courses']]
+        print(tabulate(table, headers=headers, tablefmt='pretty'))
     else:
-        print("No grades to save.")
+        print("No courses available for this semester.")
+
+def main_menu():
+    while True:
+        print("\n--- Grade Calculator Menu ---")
+        print("1. Add new semester")
+        print("2. View saved semesters")
+        print("3. Delete all saved data")
+        print("4. Exit")
+        choice = input("Enter your choice (1-4): ")
+
+        if choice == '1':
+            courses = get_course_data()
+            final_grade = calculate_final_grade(courses)
+            if final_grade is not None:
+                semester_number = len(load_all_data()) + 1
+                semester_data = {
+                    "semester_number": semester_number,
+                    "final_grade": final_grade,
+                    "courses": courses
+                }
+                save_semester(semester_data)
+                print(f"Semester {semester_number} saved with final grade {final_grade:.2f}.")
+            else:
+                print("No valid grades entered for this semester.")
+        elif choice == '2':
+            all_data = load_all_data()
+            if not all_data:
+                print("No saved semesters available.")
+            else:
+                for semester in all_data:
+                    display_semester(semester)
+        elif choice == '3':
+            delete_saved_data()
+        elif choice == '4':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
-    main()
+    main_menu()

@@ -1,0 +1,38 @@
+[
+    {
+        "semester_number": 3,
+        "final_grade": 3.6,
+        "courses": [
+            {
+                "name": "BASES DE DATOS",
+                "credits": 3.0,
+                "grade": 5.0
+            },
+            {
+                "name": "CALCULO DIFERENCIAL",
+                "credits": 4.0,
+                "grade": 3.4
+            },
+            {
+                "name": "ELECTIVA I (CIENCIAS BASICAS)",
+                "credits": 3.0,
+                "grade": 3.0
+            },
+            {
+                "name": "FISICA ELECTROMAGNETICA",
+                "credits": 4.0,
+                "grade": 2.6
+            },
+            {
+                "name": "PROGRAMACION ORIENTADA A OBJETOS",
+                "credits": 3.0,
+                "grade": 4.0
+            },
+            {
+                "name": "REDES",
+                "credits": 3.0,
+                "grade": 4.0
+            }
+        ]
+    }
+]

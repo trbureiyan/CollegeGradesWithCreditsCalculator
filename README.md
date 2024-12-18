@@ -13,8 +13,9 @@ This application allows you to calculate the final grade for the current semeste
 
 ### Grades
 
-No grades available.
+- Semester 1: 3.60
 
-**Overall average grade:** 0.00
+**Overall average grade:** 3.60
 
 ----
+

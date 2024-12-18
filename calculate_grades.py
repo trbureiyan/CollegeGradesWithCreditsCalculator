@@ -23,7 +23,26 @@ def calculate_final_grade(courses):
     if total_credits == 0:
         return None
     weighted_sum = sum(course['credits'] * course['grade'] for course in valid_courses)
-    return weighted_sum / total_credits if total_credits > 0 else 0
+    return weighted_sum / total_credits
+
+def save_grades(all_semesters):
+    try:
+        with open('grades.json', 'r') as file:
+            existing_grades = json.load(file)
+    except (json.JSONDecodeError, FileNotFoundError):
+        existing_grades = []
+    existing_grades.extend(all_semesters)
+    with open('grades.json', 'w') as file:
+        json.dump(existing_grades, file)
+
+def delete_saved_data():
+    confirmation = input("Are you sure you want to delete all saved data? (yes/no): ").lower()
+    if confirmation == 'yes':
+        with open('grades.json', 'w') as file:
+            json.dump([], file)
+        print("All saved data has been deleted.")
+    else:
+        print("Data deletion canceled.")
 
 def main():
     all_semesters = []
@@ -32,14 +51,27 @@ def main():
         courses = get_course_data()
         final_grade = calculate_final_grade(courses)
         if final_grade is not None:
-            all_semesters.append(final_grade)
-        print(f"Final grade for this semester: {final_grade:.2f}")
-        another_semester = input("Do you want to enter another semester? (yes/no): ").lower()
-        if another_semester != 'yes':
+            all_semesters.append({"semester": len(all_semesters) + 1, "grade": final_grade})
+            print(f"Final grade for this semester: {final_grade:.2f}")
+        else:
+            print("No valid grades entered for this semester.")
+        action = input("Choose an action - (c)ontinue, (d)elete data, (e)xit: ").lower()
+        if action == 'c':
+            continue
+        elif action == 'd':
+            delete_saved_data()
+            all_semesters = []
+        elif action == 'e':
             break
-
-    overall_average = sum(all_semesters) / len(all_semesters) if all_semesters else 0
-    print(f"\nOverall average grade: {overall_average:.2f}")
+        else:
+            print("Invalid option. Exiting.")
+            break
+    if all_semesters:
+        overall_average = sum(s["grade"] for s in all_semesters) / len(all_semesters)
+        print(f"\nOverall average grade: {overall_average:.2f}")
+        save_grades(all_semesters)
+    else:
+        print("No grades to save.")
 
 if __name__ == "__main__":
     main()

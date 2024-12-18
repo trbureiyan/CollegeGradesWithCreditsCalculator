@@ -5,17 +5,17 @@ from tabulate import tabulate
 def get_course_data():
     courses = []
     while True:
-        course_name = input("Enter course name (or 'done' to finish): ")
+        course_name = input("\n Enter course name (or 'done' to finish): ")
         if course_name.lower() == 'done':
             break
         try:
-            credits = float(input(f"Enter credits for {course_name}: "))
-            grade = float(input(f"Enter grade for {course_name} (type 0 if not available): "))
+            credits = float(input(f"\n Enter credits for {course_name}: "))
+            grade = float(input(f"\n Enter grade for {course_name} (type 0 if not available): "))
             if credits < 0 or grade < 0:
-                raise ValueError("Credits and grade must be non-negative.")
+                raise ValueError("\n Credits and grade must be non-negative.")
             courses.append({"name": course_name, "credits": credits, "grade": grade})
         except ValueError as e:
-            print(f"Invalid input: {e}. Please try again.")
+            print(f"\n Invalid input: {e}. Please try again.")
     return courses
 
 def calculate_final_grade(courses):
@@ -45,22 +45,22 @@ def load_all_data():
     return all_data
 
 def delete_saved_data():
-    confirmation = input("Are you sure you want to delete all saved data? (yes/no): ").lower()
+    confirmation = input("\n Are you sure you want to delete all saved data? (yes/no): ").lower()
     if confirmation == 'yes':
         with open('grades.json', 'w') as file:
             json.dump([], file)
-        print("All saved data has been deleted.")
+        print("\n All saved data has been deleted.")
     else:
-        print("Data deletion canceled.")
+        print("\n Data deletion canceled.")
 
 def display_semester(semester):
-    print(f"\nSemester {semester['semester_number']}: Final Grade {semester['final_grade']:.2f}")
+    print(f"\n Semester {semester['semester_number']}: Final Grade {semester['final_grade']:.2f}")
     if 'courses' in semester and semester['courses']:
         headers = ['Course Name', 'Credits', 'Grade']
         table = [[course['name'], course['credits'], course['grade']] for course in semester['courses']]
         print(tabulate(table, headers=headers, tablefmt='pretty'))
     else:
-        print("No courses available for this semester.")
+        print("\n No courses available for this semester.")
 
 def main_menu():
     while True:
@@ -82,23 +82,23 @@ def main_menu():
                     "courses": courses
                 }
                 save_semester(semester_data)
-                print(f"Semester {semester_number} saved with final grade {final_grade:.2f}.")
+                print(f"\n Semester {semester_number} saved with final grade {final_grade:.2f}.")
             else:
-                print("No valid grades entered for this semester.")
+                print("\n No valid grades entered for this semester.")
         elif choice == '2':
             all_data = load_all_data()
             if not all_data:
-                print("No saved semesters available.")
+                print("\n No saved semesters available.")
             else:
                 for semester in all_data:
                     display_semester(semester)
         elif choice == '3':
             delete_saved_data()
         elif choice == '4':
-            print("Exiting the program.")
+            print("\n Exiting the program.")
             break
         else:
-            print("Invalid choice. Please try again.")
+            print("\n Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main_menu()

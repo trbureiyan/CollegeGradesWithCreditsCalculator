@@ -1,6 +1,7 @@
 # CollegeGradesWithCreditsCalculator
 
 ----
+
 ## Grade Calculation Application
 
 This application allows you to calculate the final grade for the current semester and the overall average grade for all semesters.
@@ -11,11 +12,23 @@ This application allows you to calculate the final grade for the current semeste
 2. If you don't have a grade for a course, enter `0`.
 3. The application will calculate the final grade for the semester and the overall average grade.
 
-### Grades
+## Overall Average Grade: **3.60**
 
-- Semester 1: 3.60
 
-**Overall average grade:** 3.60
+### Semester 3
+
+Final Grade: **3.60**
+
+| Course Name                      |   Credits |   Grade |
+|----------------------------------|-----------|---------|
+| BASES DE DATOS                   |         3 |     5   |
+| CALCULO DIFERENCIAL              |         4 |     3.4 |
+| ELECTIVA I (CIENCIAS BASICAS)    |         3 |     3   |
+| FISICA ELECTROMAGNETICA          |         4 |     2.6 |
+| PROGRAMACION ORIENTADA A OBJETOS |         3 |     4   |
+| REDES                            |         3 |     4   |
+
 
 ----
+
 
